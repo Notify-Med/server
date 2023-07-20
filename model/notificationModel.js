@@ -14,11 +14,12 @@ const notificationSchema = mongoose.Schema({
         default: new Date(),
         required: true
     },
-    receiverId:[{  //each language is related to only one user
+    senderId:{  
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Receiver',
+        required: true,
+        ref: 'User',
         index: true 
-    }],
+    },
     receiverId:[{  //each language is related to only one user
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Receiver',
@@ -29,3 +30,4 @@ const notificationSchema = mongoose.Schema({
 
 const Notification = mongoose.model('Notification',notificationSchema);
 module.exports = Notification;
+ 
