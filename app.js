@@ -1,5 +1,7 @@
 const express = require('express');
+const colors = require('colors');
 const dotenv = require('dotenv').config(); 
+const connectDB =require('./config/db')
 const port = process.env.PORT || 4000;
 const bodyParser = require ('body-parser');
 const cookieParser = require('cookie-parser');
@@ -7,20 +9,30 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 
+connectDB()
 
 const app = express();
-app.listen(port, ()=> console.log(`Server listening on port ${port}`));
 
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+ 
 app.use(cors());
-
-mongoose.connect('mongodb://127.0.0.1/NotifyMed',).then(()=>{
-    console.log('-> connexion to database ');
-}).catch((err)=>{
-    console.log(err);
-});
-
 app.use(bodyParser.json());
 app.use(logger('dev'));
 app.use(cookieParser());
+
+// ------------ ROUTES -------------
+
+const userRouter = require('./routes/userRoutes');
+
+
+app.use('/users',userRouter)
+
+
+
+
+
+app.listen(port, ()=> console.log(`Server listening on port ${port}`));
+
 
 module.exports = app;

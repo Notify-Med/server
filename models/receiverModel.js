@@ -11,7 +11,8 @@ const receiverSchema = mongoose.Schema({
         index: true 
     }]
 
-})
+},
+{timestamps: true} )
 
 const Receiver = mongoose.model('Receiver',receiverSchema);
 module.exports = Receiver;
