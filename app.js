@@ -1,13 +1,15 @@
-var express = require('express');
-var bodyParser = require ('body-parser');
-var cookieParser = require('cookie-parser');
-var cors = require('cors');
-var mongoose = require('mongoose');
-var logger = require('morgan');
+const express = require('express');
+const dotenv = require('dotenv').config(); 
+const port = process.env.PORT || 4000;
+const bodyParser = require ('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const logger = require('morgan');
 
 
-
-var app = express();
+const app = express();
+app.listen(port, ()=> console.log(`Server listening on port ${port}`));
 
 app.use(cors());
 
