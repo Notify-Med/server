@@ -1,4 +1,4 @@
-const Notification = require("../model/notificationModel");
+const Notification = require("../models/notificationModel");
 const asyncHandler = require("express-async-handler");
 
 //get all notifications
