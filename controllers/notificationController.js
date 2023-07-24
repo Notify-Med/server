@@ -1,12 +1,18 @@
-const Notification = require("../model/notificationModel");
+const Notification = require("../models/notificationModel");
 const asyncHandler = require("express-async-handler");
+const Receiver = require("../models/receiverModel");
 
 //get all notifications
 //GET "/notifications/all"
-const getAllNotifications = asyncHandler(async (req, res) => {
-  const notifications = await Notification.find({});
-
-  res.json(notifications);
+const getNotifications = asyncHandler(async (req, res) => {
+  const usersNotifs = await Receiver.findById(req.user.id);
+  res.json(usersNotifs.notificationId);
+  if (!usersNotifs) {
+    console.log('the user has no notifications !');
+    // if we do not find any document with the id of the user in the receiver collection, 
+    // this means that the user doesn't have any notifications
+  }
+  
 });
 
 //create a notification
@@ -35,7 +41,7 @@ const getNotificationById = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getAllNotifications,
+  getNotifications,
   createNotification,
   getNotificationById,
 };
