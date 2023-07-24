@@ -1,4 +1,5 @@
 const Notification = require("../models/notificationModel");
+const Receiver = require("../models/receiverModel");
 const asyncHandler = require("express-async-handler");
 
 //get all notifications
@@ -11,7 +12,9 @@ const getAllNotifications = asyncHandler(async (req, res) => {
 
 //create a notification
 const createNotification = asyncHandler(async (req, res) => {
-  const { title, description, date, senderId, receiverId } = req.body;
+  const { title, description, date, senderId, receiverId } = req.body; //should implement receiversId as an array of ids
+  console.log(receiverId);
+
   const notification = new Notification({
     title,
     description,
@@ -20,6 +23,14 @@ const createNotification = asyncHandler(async (req, res) => {
     receiverId,
   });
   const createdNotification = await notification.save();
+
+  const receiver = await Receiver.findById(receiverId);
+  if (receiver) {
+    receiver.notificationId.push(createdNotification._id);
+    receiver.status.push(false);
+    await receiver.save();
+  }
+
   res.status(201).json(createdNotification);
 });
 
