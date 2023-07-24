@@ -21,12 +21,13 @@ const notificationSchema = mongoose.Schema(
       ref: "User",
       index: true,
     },
-    receiverId: {
-      //each language is related to only one user
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Receiver",
-      index: true,
-    },
+    receiversId: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Receiver",
+        index: true,
+      },
+    ],
   },
   { timestamps: true }
 );
