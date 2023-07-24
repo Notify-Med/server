@@ -37,6 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const reciever = await Receiver.create({
     status: [],
     notificationId: [],
+    userId: user._id,
   });
 
   if (user) {

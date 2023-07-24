@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 //get all notifications
-//GET "/notifications/all"
+//GET "/notifications/"
 const getAllNotifications = asyncHandler(async (req, res) => {
   const notifications = await Notification.find({});
 
@@ -12,6 +12,7 @@ const getAllNotifications = asyncHandler(async (req, res) => {
 });
 
 //create a notification
+//POST "/notifications/"
 const createNotification = asyncHandler(async (req, res) => {
   const { title, description, date, senderId, receiversId } = req.body; //should implement receiversId as an array of ids
   console.log(receiversId);
@@ -29,6 +30,7 @@ const createNotification = asyncHandler(async (req, res) => {
   const createdNotification = await notification.save();
 
   for (const receiverId of receiversId) {
+    console.log(receiverId);
     const receiver = await Receiver.findById(receiverId);
     if (receiver) {
       receiver.notificationId.push(createdNotification._id);
@@ -40,6 +42,7 @@ const createNotification = asyncHandler(async (req, res) => {
 });
 
 //get a notification by id
+//GET "/notifications/:id"
 const getNotificationById = asyncHandler(async (req, res) => {
   const notification = await Notification.findById(req.params.id);
   if (notification) {

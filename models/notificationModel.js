@@ -10,6 +10,11 @@ const notificationSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      enum: ["general", "alert"],
+      default: "general",
+    },
     date: {
       type: Date,
       default: new Date(),

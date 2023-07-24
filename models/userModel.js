@@ -15,12 +15,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter an email"],
     },
-    notifications: {
-      // get the id of the document that stores the list of notifications in the receiver collection
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Reciever",
-      index: true,
-    },
   },
   { timestamps: true } //this is to add the created_at and updated_at fields
 );
