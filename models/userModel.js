@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     },
     password:{
         type: String,
-        required: [true, 'Please enter an email']
+        required: [true, 'Please enter a password']
     },
 
 },
