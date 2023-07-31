@@ -1,14 +1,42 @@
 const express = require("express");
 const {
-  getNotifications,
+  // getNotifications,
+  getNotificationsAxios,
   createNotification,
   getNotificationById,
 } = require("../controllers/notificationController");
-const {protect}=require('../middlewares/authMiddleware')
+const { protect } = require("../middlewares/authMiddleware");
+const { get } = require("mongoose");
 
 const router = express.Router();
 
-router.route("/").get(protect, getNotifications).post(protect, createNotification);
+router
+  .route("/")
+  .get(protect, getNotificationsAxios)
+  .post(protect, createNotification);
 router.route("/:id").get(getNotificationById);
 
-module.exports = router;
+const socketCreateNotification = (io) => {
+  io.on("connection", (socket) => {
+    console.log("a user connected");
+    socket.on("createNotification", (data) => {
+      createNotification(data)
+        .then(({ event, res }) => {
+          console.log("before");
+          socket.emit(event, res);
+          console.log("res", res);
+          console.log("event", event);
+        })
+        .catch((error) => {
+          console.error("Error during createNotification:", error);
+        });
+
+      io.emit("newNotificationCreated");
+    });
+  });
+};
+
+module.exports = {
+  notificationRoute: router,
+  socketCreateNotification,
+};
