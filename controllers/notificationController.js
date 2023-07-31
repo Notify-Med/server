@@ -61,6 +61,7 @@ const createNotification = async (data) => {
 };
 
 //get a notification by id
+//GET "/notifications/:id"
 const getNotificationById = asyncHandler(async (req, res) => {
   const notification = await Notification.findById(req.params.id);
   if (notification) {

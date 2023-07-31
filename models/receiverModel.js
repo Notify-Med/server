@@ -1,15 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const receiverSchema = mongoose.Schema({
-
-    notificationId:[{  //each language is related to only one user
+const receiverSchema = mongoose.Schema(
+  {
+    notificationId: [
+      {
+        //each language is related to only one user
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification',
-        index: true 
-    }]
+        ref: "Notification",
+        index: true,
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
-},
-{timestamps: true} )
-
-const Receiver = mongoose.model('Receiver',receiverSchema);
+const Receiver = mongoose.model("Receiver", receiverSchema);
 module.exports = Receiver;
