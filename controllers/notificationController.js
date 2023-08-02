@@ -7,17 +7,45 @@ const User = require("../models/userModel");
 //get all notifications
 //GET "/notifications/all"
 
+// const getNotificationsAxios = asyncHandler(async (req, res) => {
+//   console.log("user axios", req.user.id);
+//   const usersNotifs = await Receiver.findById(req.user.id).populate(
+//     "notificationId"
+//   );
+//   if (!usersNotifs) {
+//     res.json("the user has no notifications !");
+//     // if we do not find any document with the id of the user in the receiver collection,
+//     // this means that the user doesn't have any notifications
+//   } else {
+//     res.json(usersNotifs.notificationId);
+//   }
+// });
+
 const getNotificationsAxios = asyncHandler(async (req, res) => {
-  console.log("user axios", req.user.id);
-  const usersNotifs = await Receiver.findById(req.user.id).populate(
-    "notificationId"
-  );
+  console.log("user axios", req.body.id);
+  const usersNotifs = await Receiver.findById(req.body.id).populate({
+    path: "notificationId",
+    populate: {
+      path: "senderId",
+      model: "User", // Reference to the User model
+      select: "name", // Assuming "name" is the field in the User model that contains the sender's name
+    },
+  });
+
   if (!usersNotifs) {
     res.json("the user has no notifications !");
-    // if we do not find any document with the id of the user in the receiver collection,
-    // this means that the user doesn't have any notifications
   } else {
-    res.json(usersNotifs.notificationId);
+    // Map the notifications to extract the sender's name and create a new array
+    const notifications = usersNotifs.notificationId.map((notification) => {
+      return {
+        title: notification.title,
+        description: notification.description,
+        date: notification.date.toLocaleString(),
+        sender: notification.senderId.name, // Access the sender's name via the populated "senderId"
+      };
+    });
+
+    res.json(notifications.reverse());
   }
 });
 

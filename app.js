@@ -49,7 +49,6 @@ const {
 
 app.use("/users", userRouter);
 app.use("/notifications", notificationRoute);
-app.use("/receiver", receiverRoute);
 // ---------------------------------
 
 // ------------ SOCKET -------------

@@ -12,7 +12,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(protect, getNotificationsAxios)
+  .post(getNotificationsAxios) // change to get with protection
   .post(protect, createNotification);
 router.route("/:id").get(getNotificationById);
 
