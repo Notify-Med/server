@@ -22,8 +22,8 @@ const User = require("../models/userModel");
 // });
 
 const getNotificationsAxios = asyncHandler(async (req, res) => {
-  console.log("user axios", req.body.id);
-  const usersNotifs = await Receiver.findById(req.body.id).populate({
+  console.log("user axios", req.user.id);
+  const usersNotifs = await Receiver.findById(req.user.id).populate({
     path: "notificationId",
     populate: {
       path: "senderId",
