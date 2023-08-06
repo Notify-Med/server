@@ -51,7 +51,7 @@ notificationSchema.post("save", async function () {
     try {
       await Receiver.findOneAndUpdate(
         { _id: receiverId },
-        { $push: { notificationId: this._id } },
+        { $push: { notification: { notificationId: this._id } } },
         { upsert: true } // This option creates the document if it doesn't exist
       );
     } catch (error) {

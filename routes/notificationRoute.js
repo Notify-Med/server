@@ -1,9 +1,11 @@
 const express = require("express");
 const {
   // getNotifications,
-  getNotificationsAxios,
+  getNotifications,
+  getNewNotifications,
   createNotification,
   getNotificationById,
+  updateNotificationLog,
 } = require("../controllers/notificationController");
 const { protect } = require("../middlewares/authMiddleware");
 const { get } = require("mongoose");
@@ -12,9 +14,14 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(protect, getNotificationsAxios) // change to get with protection
+  .get(protect, getNotifications) // change to get with protection
   .post(protect, createNotification);
-router.route("/:id").get(getNotificationById);
+
+router.route("/new").get(protect, getNewNotifications);
+router
+  .route("/:id")
+  .get(getNotificationById)
+  .put(protect, updateNotificationLog);
 
 const socketCreateNotification = (io) => {
   io.on("connection", (socket) => {
