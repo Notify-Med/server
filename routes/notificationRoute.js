@@ -35,7 +35,7 @@ const socketUpdateNotificationLog = (io) => {
         .catch((error) => {
           console.error("Error during updateNotificationLog:", error);
         });
-      io.emit("newNotificationCreated");
+      io.emit("update");
     });
   });
 };
@@ -55,7 +55,7 @@ const socketCreateNotification = (io) => {
           console.error("Error during createNotification:", error);
         });
 
-      io.emit("newNotificationCreated");
+      io.emit("update");
     });
   });
 };
