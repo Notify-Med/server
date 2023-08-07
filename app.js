@@ -45,6 +45,7 @@ const {
   notificationRoute,
   // socketGetNotifications,
   socketCreateNotification,
+  socketUpdateNotificationLog,
 } = require("./routes/notificationRoute");
 
 app.use("/users", userRouter);
@@ -62,6 +63,7 @@ const io = new Server(server, {
 
 // socketGetNotifications(io);
 socketCreateNotification(io);
+socketUpdateNotificationLog(io);
 
 // ---------------------------------
 

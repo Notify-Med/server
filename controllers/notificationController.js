@@ -48,7 +48,6 @@ const getNotifs = asyncHandler(async (type, req, res) => {
       usersNotifs = await receiver.populate(
         "notification.notificationId" // Correct the population path
       );
-      console.log("usersNotifs: ", usersNotifs);
       usersNotifs = usersNotifs.notification.filter(
         (notif) => notif.log === false
       );
@@ -57,7 +56,6 @@ const getNotifs = asyncHandler(async (type, req, res) => {
     if (!usersNotifs) {
       return res.json("The user has no notifications!");
     }
-    console.log("usernotifs: ", usersNotifs);
 
     // Map the notifications to extract the sender's name and create a new array
     const notifications = usersNotifs.map((notificationEntry) => {
@@ -87,12 +85,44 @@ const getNewNotifications = asyncHandler(async (req, res) => {
   getNotifs("new", req, res);
 });
 
-const updateNotificationLog = asyncHandler(async (req, res) => {
-  try {
-    const { log } = req.body;
-    const notifId = req.params.id;
-    const receiverId = req.user.id;
+// const updateNotificationLog = asyncHandler(async (req, res) => {
+//   try {
+//     const { log } = req.body;
+//     const notifId = req.params.id;
+//     const receiverId = req.user.id;
 
+//     // Find the receiver document by ID
+//     const receiver = await Receiver.findById(receiverId);
+
+//     if (!receiver) {
+//       return res.status(404).json({ error: "Receiver not found" });
+//     }
+
+//     // Find the notification within the receiver's notifications array
+//     const notificationToUpdate = receiver.notification.find(
+//       (notif) => notif.notificationId == notifId
+//     );
+
+//     if (!notificationToUpdate) {
+//       return res.status(404).json({ error: "Notification not found" });
+//     }
+
+//     // Update the log property of the notification
+//     notificationToUpdate.log = log;
+
+//     // Save the changes to the receiver document
+//     await receiver.save();
+
+//     res.json({ message: "Notification log updated successfully" });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ error: "An error occurred" });
+//   }
+// });
+
+const updateNotificationLog = asyncHandler(async (data) => {
+  try {
+    const { receiverId, notifId } = data;
     // Find the receiver document by ID
     const receiver = await Receiver.findById(receiverId);
 
@@ -110,15 +140,17 @@ const updateNotificationLog = asyncHandler(async (req, res) => {
     }
 
     // Update the log property of the notification
-    notificationToUpdate.log = log;
+    notificationToUpdate.log = true;
 
     // Save the changes to the receiver document
     await receiver.save();
-
-    res.json({ message: "Notification log updated successfully" });
+    return {
+      event: "notificationLogUpdated",
+      res: "Notification log updated successfully",
+    };
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "An error occurred" });
+    return { event: "notificationLogUpdated", res: "An error occurred" };
   }
 });
 

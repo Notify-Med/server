@@ -13,15 +13,32 @@ const { get } = require("mongoose");
 const router = express.Router();
 
 router
-  .route("/")
-  .get(protect, getNotifications) // change to get with protection
+  .route("/") // change to get with protection
   .post(protect, createNotification);
-
+router.route("/all").get(protect, getNotifications);
 router.route("/new").get(protect, getNewNotifications);
 router
   .route("/:id")
   .get(getNotificationById)
   .put(protect, updateNotificationLog);
+
+const socketUpdateNotificationLog = (io) => {
+  io.on("connection", (socket) => {
+    console.log("a user connected");
+    socket.on("updateNotificationLog", (data) => {
+      updateNotificationLog(data)
+        .then(({ event, res }) => {
+          socket.emit(event, res);
+          console.log("res", res);
+          console.log("event", event);
+        })
+        .catch((error) => {
+          console.error("Error during updateNotificationLog:", error);
+        });
+      io.emit("newNotificationCreated");
+    });
+  });
+};
 
 const socketCreateNotification = (io) => {
   io.on("connection", (socket) => {
@@ -45,5 +62,6 @@ const socketCreateNotification = (io) => {
 
 module.exports = {
   notificationRoute: router,
+  socketUpdateNotificationLog,
   socketCreateNotification,
 };
