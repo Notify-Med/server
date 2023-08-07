@@ -4,7 +4,8 @@ const {
   getNotifications,
   getNewNotifications,
   createNotification,
-  getNotificationById,
+  // getNotificationById,
+  getSentNotifications,
   updateNotificationLog,
 } = require("../controllers/notificationController");
 const { protect } = require("../middlewares/authMiddleware");
@@ -17,10 +18,9 @@ router
   .post(protect, createNotification);
 router.route("/all").get(protect, getNotifications);
 router.route("/new").get(protect, getNewNotifications);
-router
-  .route("/:id")
-  .get(getNotificationById)
-  .put(protect, updateNotificationLog);
+router.route("/:id").put(protect, updateNotificationLog);
+// .get(getNotificationById)
+router.route("/sent").get(protect, getSentNotifications);
 
 const socketUpdateNotificationLog = (io) => {
   io.on("connection", (socket) => {
