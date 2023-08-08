@@ -8,6 +8,10 @@ const receiverSchema = mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Notification",
         index: true,
+        // read: {
+        //   type: Boolean,
+        //   default: false
+        // },
       },
     ],
   },

@@ -65,7 +65,35 @@ socketCreateNotification(io);
 
 // ---------------------------------
 
+
+
+
+
+// ---------- NODEMAILER -----------
+// const nodemailer = require('nodemailer');
+
+// const transporter = nodemailer.createTransport({
+//   host: "smtp.gmail.com",  // Gmail SMTP server address
+//   port: 465,              // Gmail SMTP port (465 for SSL)
+//   secure: true,           // Use SSL (TLS is also available with port 587)
+//   auth: {
+//     user: 'aayahamzaa@gmail.com',    
+//     pass: process.env.PASS     
+//   }
+// });
+
+// const info = transporter.sendMail({
+//   from : 'aya <aayahamzaa@gmail.com>',
+//   to: 'ayatheboss2@gmail.com',
+//   subject: 'Hi this is a test email'
+// })
+// console.log("message sent: " + info.messageId)
+
 // ---------------------------------
+
+
+
+
 
 server.listen(port, () => {
   console.log(`Server running on port ${port}`.yellow.bold);
