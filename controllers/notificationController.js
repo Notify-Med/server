@@ -37,20 +37,24 @@ const User = require("../models/userModel");
 
 const getNotifs = asyncHandler(async (type, req, res) => {
   try {
-    let usersNotifs;
     const receiver = await Receiver.findById(req.user.id);
+
+    if (!receiver) {
+      return res.json("User not found or has no notifications");
+    }
+
+    let usersNotifs;
+
     if (type === "all") {
-      usersNotifs = await receiver.populate(
-        "notification.notificationId" // Correct the population path
-      );
+      usersNotifs = await receiver.populate("notification.notificationId");
       usersNotifs = usersNotifs.notification;
     } else {
-      usersNotifs = await receiver.populate(
-        "notification.notificationId" // Correct the population path
-      );
-      usersNotifs = usersNotifs.notification.filter(
-        (notif) => notif.log === false
-      );
+      usersNotifs = await receiver.populate("notification.notificationId");
+      usersNotifs = usersNotifs.notification.filter((notif) => notif.log === false);
+    }
+
+    if (!usersNotifs || usersNotifs.length === 0) {
+      return res.json("The user has no notifications!");
     }
 
     if (!usersNotifs) {
