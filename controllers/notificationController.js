@@ -151,7 +151,6 @@ const getSentNotifications = asyncHandler(async (req, res) => {
           notification.receiverId.map(async (receiverId) => {
             const receiverName = await User.findById(receiverId);
             const receiver = await Receiver.findById(receiverId);
-            console.log("target notif id", notification._id);
             const getMatchedNotif = () => {
               for (const notif of receiver.notification) {
                 if (
@@ -171,7 +170,7 @@ const getSentNotifications = asyncHandler(async (req, res) => {
             //   }
             // });
             const res = {
-              name: receiverName.name,
+              email: receiverName.email,
               // log: notificationO.log,
               log: notificationO.log,
             };
