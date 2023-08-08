@@ -166,7 +166,7 @@ const getSentNotifications = asyncHandler(async (req, res) => {
             //   }
             // });
             const res = {
-              name: receiverName.name,
+              email: receiverName.email,
               // log: notificationO.log,
               log: notificationO.log,
             };
