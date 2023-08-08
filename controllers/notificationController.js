@@ -7,20 +7,6 @@ const User = require("../models/userModel");
 //get all notifications
 //GET "/notifications/all"
 
-// const getNotificationsAxios = asyncHandler(async (req, res) => {
-//   console.log("user axios", req.user.id);
-//   const usersNotifs = await Receiver.findById(req.user.id).populate(
-//     "notificationId"
-//   );
-//   if (!usersNotifs) {
-//     res.json("the user has no notifications !");
-//     // if we do not find any document with the id of the user in the receiver collection,
-//     // this means that the user doesn't have any notifications
-//   } else {
-//     res.json(usersNotifs.notificationId);
-//   }
-// });
-
 const getNotificationsAxios = asyncHandler(async (req, res) => {
   console.log("user axios", req.user.id);
   const usersNotifs = await Receiver.findById(req.user.id).populate({
