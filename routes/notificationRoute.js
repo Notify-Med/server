@@ -1,9 +1,12 @@
 const express = require("express");
 const {
   // getNotifications,
-  getNotificationsAxios,
+  getNotifications,
+  getNewNotifications,
   createNotification,
-  getNotificationById,
+  // getNotificationById,
+  getSentNotifications,
+  updateNotificationLog,
 } = require("../controllers/notificationController");
 const { protect } = require("../middlewares/authMiddleware");
 const { get } = require("mongoose");
@@ -11,10 +14,31 @@ const { get } = require("mongoose");
 const router = express.Router();
 
 router
-  .route("/")
-  .get(protect, getNotificationsAxios) // change to get with protection
+  .route("/") // change to get with protection
   .post(protect, createNotification);
-router.route("/:id").get(getNotificationById);
+router.route("/all").get(protect, getNotifications);
+router.route("/new").get(protect, getNewNotifications);
+router.route("/:id").put(protect, updateNotificationLog);
+// .get(getNotificationById)
+router.route("/sent").get(protect, getSentNotifications);
+
+const socketUpdateNotificationLog = (io) => {
+  io.on("connection", (socket) => {
+    console.log("a user connected");
+    socket.on("updateNotificationLog", (data) => {
+      updateNotificationLog(data)
+        .then(({ event, res }) => {
+          socket.emit(event, res);
+          console.log("res", res);
+          console.log("event", event);
+        })
+        .catch((error) => {
+          console.error("Error during updateNotificationLog:", error);
+        });
+      io.emit("update");
+    });
+  });
+};
 
 const socketCreateNotification = (io) => {
   io.on("connection", (socket) => {
@@ -31,12 +55,13 @@ const socketCreateNotification = (io) => {
           console.error("Error during createNotification:", error);
         });
 
-      io.emit("newNotificationCreated");
+      io.emit("update");
     });
   });
 };
 
 module.exports = {
   notificationRoute: router,
+  socketUpdateNotificationLog,
   socketCreateNotification,
 };

@@ -1,17 +1,31 @@
 const mongoose = require("mongoose");
 
+// const receiverSchema = mongoose.Schema(
+//   {
+//     notificationId: [
+//       {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "Notification",
+//         index: true,
+//       },
+//     ],
+//   },
+//   { timestamps: true }
+// );
+
 const receiverSchema = mongoose.Schema(
   {
-    notificationId: [
+    notification: [
       {
-        //each language is related to only one user
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Notification",
-        index: true,
-        // read: {
-        //   type: Boolean,
-        //   default: false
-        // },
+        notificationId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Notification",
+          index: true,
+        },
+        log: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
   },
