@@ -62,17 +62,22 @@ const getNotifs = asyncHandler(async (type, req, res) => {
     }
 
     // Map the notifications to extract the sender's name and create a new array
-    const notifications = usersNotifs.map((notificationEntry) => {
-      const notification = notificationEntry.notificationId;
-      return {
-        id: notification._id,
-        title: notification.title,
-        description: notification.description,
-        date: notification.createdAt.toLocaleString(),
-        sender: notification.senderId.name, // Access the sender's name via the populated "senderId"
-        log: notificationEntry.log,
-      };
-    });
+    const notifications = await Promise.all(
+      usersNotifs.map(async (notificationEntry) => {
+        const notification = notificationEntry.notificationId;
+        const sender = await User.findById(notification.senderId);
+
+        return {
+          id: notification._id,
+          title: notification.title,
+          description: notification.description,
+          date: notification.createdAt.toLocaleString(),
+          sender: sender.email, // Access the sender's name via the populated "senderId"
+          log: notificationEntry.log,
+        };
+      })
+    );
+    console.log("notifications", notifications[0]);
 
     res.json(notifications.reverse());
   } catch (error) {
