@@ -6,11 +6,9 @@ const port = process.env.PORT || 4000;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const logger = require("morgan");
 const http = require("http");
 const { Server } = require("socket.io");
-const allowedOrigins = require("./config/allowedOrigins");
 const clientUrl = "http://localhost:3000";
 
 connectDB();
